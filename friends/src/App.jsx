@@ -4,12 +4,19 @@ import axios from 'axios';
 import logo from "./logo.svg";
 import "./App.css";
 import Friends from "./components/Friends.jsx";
+import FriendForm from "./components/FriendForm.jsx";
 
 class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            friends: []
+            friends: [],
+            newFriend: {
+                name: '',
+                age: '',
+                email: '',
+                
+            }
         }
     }
 
@@ -26,10 +33,20 @@ class App extends React.Component {
             });
     }
 
+    handleChanges = event => {
+        this.setState({
+            newFriend: {
+                ...this.state.newFriend,
+                [event.target.name]: event.target.value
+            }
+        })
+    }
+
     render() {
         return (
             <div className="App">
                 <Friends friends={this.state.friends}/>
+                <FriendForm handleChanges={this.handleChanges}/>
             </div>
         )
     }
