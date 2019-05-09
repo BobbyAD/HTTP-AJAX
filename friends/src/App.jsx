@@ -1,7 +1,7 @@
 import React from "react";
 import axios from 'axios';
+import { Route, NavLink } from 'react-router-dom';
 
-import logo from "./logo.svg";
 import "./App.css";
 import Friends from "./components/Friends.jsx";
 import FriendForm from "./components/FriendForm.jsx";
@@ -81,18 +81,40 @@ class App extends React.Component {
                 })
     }
 
+    updateFriend = update => {
+        axios
+            .put(`http://localhost:5000/friends/${update.id}`, update)
+                .then(res => {
+                    console.log(res);
+                    this.setState({
+                        friends: res.data
+                    })
+                })
+                .catch(err => {
+                    console.log(err)
+                    this.setState({
+                        updateError: err
+                    })
+                })
+    }
+
     render() {
         return (
             <div className="App">
-                <Friends 
+                <div>
+                    <NavLink to="/">Home</NavLink>
+                    <NavLink to="/new-friend">Add New Friend</NavLink>
+                </div>
+                <Route exact path="/" render={() => <Friends 
                     friends={this.state.friends} 
                     deleteFriend={this.deleteFriend}
-                />
-                <FriendForm 
+                    updateFriend={this.updateFriend}
+                />} />
+                <Route exact path="/new-friend" render={() => <FriendForm 
                     newFriend={this.state.newFriend}
                     handleChanges={this.handleChanges} 
                     postFriend={this.postFriend}
-                />
+                />} />
             </div>
         )
     }
