@@ -65,10 +65,29 @@ class App extends React.Component {
                 })
     }
 
+    deleteFriend = id => {
+        axios
+            .delete(`http://localhost:5000/friends/${id}`)
+                .then(res => {
+                    this.setState({
+                        friends: res.data
+                    })
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.setState({
+                        deleteError: err
+                    })
+                })
+    }
+
     render() {
         return (
             <div className="App">
-                <Friends friends={this.state.friends}/>
+                <Friends 
+                    friends={this.state.friends} 
+                    deleteFriend={this.deleteFriend}
+                />
                 <FriendForm 
                     newFriend={this.state.newFriend}
                     handleChanges={this.handleChanges} 
