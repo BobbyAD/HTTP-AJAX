@@ -15,8 +15,8 @@ class App extends React.Component {
                 name: '',
                 age: '',
                 email: '',
-                
-            }
+            },
+            error: '',
         }
     }
 
@@ -42,11 +42,38 @@ class App extends React.Component {
         })
     }
 
+    postFriend = event => {
+        event.preventDefault();
+        axios
+            .post(`http://localhost:5000/friends`, this.state.newFriend)
+                .then(res => {
+                    console.log(res);
+                    this.setState({
+                        friends: res.data,
+                        newFriend: {
+                            name: '',
+                            age: '',
+                            email: ''
+                        }
+                    })
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.setState({
+                        postError: err
+                    })
+                })
+    }
+
     render() {
         return (
             <div className="App">
                 <Friends friends={this.state.friends}/>
-                <FriendForm handleChanges={this.handleChanges}/>
+                <FriendForm 
+                    newFriend={this.state.newFriend}
+                    handleChanges={this.handleChanges} 
+                    postFriend={this.postFriend}
+                />
             </div>
         )
     }
